@@ -1,0 +1,180 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    font-size: 20px;
+    font-family: sans-serif;
+}
+
+body {
+    position: relative;
+}
+
+nav {
+    display: flex;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.9);
+    color: rgba(255, 255, 255, 0.9);
+    padding: 10px;
+    font-size: 1.5rem;
+}
+
+#main {
+    height: max-content;
+    margin: 0 15vw;
+}
+
+.web-description p {
+    text-align: center;
+    padding: 0.5rem;
+    font-size: 0.8rem;
+}
+
+.book-card {
+    display: flex;
+    flex-direction: row;
+    border: 2px solid rgba(0, 0, 0, 0.9);
+    border-radius: 1rem;
+    padding: 1rem;
+    margin: 1rem auto;
+}
+
+.book {
+    background: rgba(0, 0, 0, 0.3);
+    width: 8rem;
+    height: 10rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    text-align: center;
+    word-wrap: break-word;
+    padding: 5px;
+}
+
+.book-title {
+    font-size: 1.3rem;
+}
+
+.book-information {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 1rem;
+    line-height: 1.3rem;
+}
+
+.book-information-btn {
+    margin-top: 1rem;
+}
+
+.btn {
+    font-size: 0.8rem;
+    padding: 8px 12px 8px 12px;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.9);
+    cursor: pointer;
+}
+
+.btn-edit {
+    background: rgb(255, 209, 5);
+}
+
+.btn-remove {
+    background: rgb(207, 62, 36);
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.add-book-card {
+    justify-content: center;
+}
+
+.btn-add {
+    background: transparent;
+    font-size: 2rem;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    cursor: pointer;
+}
+
+.popup {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.popup-add-book {
+    padding: 2rem;
+    background: rgb(240, 240, 240);
+    position: relative;
+}
+
+.popup-add-book > .btn-close {
+    font-size: 1.8rem;
+    border: none;
+    color: red;
+    position: absolute;
+    top: 0.4rem;
+    right: 1rem;
+    cursor: pointer;
+}
+
+.popup-add-book > form > h2 {
+    text-align: center;
+    padding: 0.5rem;
+}
+
+.popup-add-book > form > div {
+    padding: 0.4rem;
+    font-size: 0.9rem;
+}
+
+.popup-add-book > form > div:last-child {
+    display: flex;
+    justify-content: center;
+}
+
+.popup-add-book > form > div:last-child > [type='submit'] {
+    padding: 8px 20px 8px 20px;
+    font-size: 0.8rem;
+    color: rgba(0, 0, 0, 0.8);
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(0, 0, 0, 0.9);
+    cursor: pointer;
+}
+
+.popup-add-book p {
+    margin-bottom: 5px;
+}
+
+.popup-add-book > form > div > [type='text'],
+.popup-add-book > form > div > [type='number'],
+.popup-add-book > form > div > select {
+    width: 30ch;
+    font-size: 0.8rem;
+    padding: 5px;
+    border: none;
+    background: rgba(255, 255, 255, 0.3);
+    outline: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+}
+
+.popup-add-book > form > div > [type='text']:focus,
+.popup-add-book > form > div > [type='number']:focus {
+    border-bottom: 3px solid rgb(0, 126, 199);
+}
