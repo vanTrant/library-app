@@ -1,6 +1,5 @@
 // TODO :
 // Optional: Implement cloud storage (google login)
-// Add media query for small device and large monitor
 
 // Local Storage
 class Store {
