@@ -22,15 +22,17 @@ class Store {
 
     static editBook(thisTitle, title, author, totalPages, pagesRead, readStatus) {
         const books = Store.getBooks();
-        books.forEach((book) => {
-            if (book.title === thisTitle) {
-                book.title = title.value;
-                book.author = author.value;
-                book.totalPages = totalPages.value;
-                book.pagesRead = pagesRead.value;
-                book.readStatus = readStatus.value;
-            }
-        });
+        if (!books.some((book) => book.title === thisTitle)) {
+            books.forEach((book) => {
+                if (book.title === thisTitle) {
+                    book.title = title.value;
+                    book.author = author.value;
+                    book.totalPages = totalPages.value;
+                    book.pagesRead = pagesRead.value;
+                    book.readStatus = readStatus.value;
+                }
+            });
+        } else return alert('title already exist');
         localStorage.setItem('books', JSON.stringify(books));
     }
 
@@ -151,14 +153,15 @@ function showAddBookPopup() {
         const pagesRead = document.getElementById('get-pages-read').value;
         const readStatus = document.getElementById('get-read-status').value;
 
-        // Add new book
-        const book = new Book(title, author, totalPages, pagesRead, readStatus);
-        const obj = Object.create(book);
-        console.log(obj);
-        console.log(book);
-        myLibrary.push(book);
-        Store.addBook(book);
-        renderBook(book);
+        if (!myLibrary.some((book) => book.title === title)) {
+            console.log('title available');
+            // Add new book
+            const book = new Book(title, author, totalPages, pagesRead, readStatus);
+
+            myLibrary.push(book);
+            Store.addBook(book);
+            renderBook(book);
+        } else return alert('Title already exist');
 
         // Remove the form popup
         section.remove();
@@ -203,12 +206,14 @@ function showEditBookPopup(targetEvent, thisTitle, thisAuthor, thisTotalPages, t
         Store.editBook(thisTitle, title, author, totalPages, pagesRead, readStatus);
 
         // Update the UI
-        getThisValue(targetEvent, 'title').textContent = title.value;
-        getThisValue(targetEvent, 'author').textContent = author.value;
-        getThisValue(targetEvent, 'total-pages').textContent = totalPages.value;
-        getThisValue(targetEvent, 'pages-read').textContent = pagesRead.value;
-        getThisValue(targetEvent, 'read-status').textContent = readStatus.value;
-
+        const books = Store.getBooks();
+        if (!books.some((book) => book.title === thisTitle)) {
+            getThisValue(targetEvent, 'title').textContent = title.value;
+            getThisValue(targetEvent, 'author').textContent = author.value;
+            getThisValue(targetEvent, 'total-pages').textContent = totalPages.value;
+            getThisValue(targetEvent, 'pages-read').textContent = pagesRead.value;
+            getThisValue(targetEvent, 'read-status').textContent = readStatus.value;
+        }
         // Remove the form popup
         section.remove();
     });
