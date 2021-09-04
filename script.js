@@ -1,13 +1,14 @@
 // TODO :
-// 1. Add edit functionality
-// 2. Implement local storage
+// 1. Implement local storage
 // Optional: Implement cloud storage (google login)
-// 3. Add media query for small device and large monitor
+// 2. Add media query for small device and large monitor
 
 const addBookBtn = document.querySelector('.btn-add');
 let myLibrary = [];
 
-addBookBtn.addEventListener('click', showFormPopup);
+// Local Storage
+
+addBookBtn.addEventListener('click', showAddBookPopup);
 
 function Book(title, author, totalPages, pagesRead, readStatus) {
     this.title = title;
@@ -20,6 +21,9 @@ function Book(title, author, totalPages, pagesRead, readStatus) {
     };
 }
 
+Book.prototype.edit = editBook();
+Book.prototype.remove = removeBook();
+
 function renderBook(book) {
     const app = document.getElementById('app');
     const div = document.createElement('div');
@@ -27,13 +31,13 @@ function renderBook(book) {
     div.classList.add('book-card');
     div.innerHTML = `
         <div class="book">
-            <p class="book-title">${book.title}</p>
-            <p class="book-author">${book.author}</p>
+            <p class="book-title" data-title>${book.title}</p>
+            <p class="book-author" data-author>${book.author}</p>
         </div>
         <div class="book-information">
-            <p>Total pages : ${book.totalPages}</p>
-            <p>Pages read : ${book.pagesRead}</p>
-            <p>Read status : ${book.readStatus}</p>
+            <p>Total pages : <span data-total-pages>${book.totalPages}</span></p>
+            <p>Pages read : <span data-pages-read>${book.pagesRead}</span></p>
+            <p>Read status : <span data-read-status>${book.readStatus}</span></p>
             <div class="book-information-btn">
                 <button class="btn btn-edit">Edit Book</button>
                 <button class="btn btn-remove">Remove Book</button>
@@ -41,80 +45,58 @@ function renderBook(book) {
         </div>
     `;
     app.appendChild(div);
-
-    const bookTitle = document.querySelectorAll('.book-title');
-    // Remove book
-    removeBook();
+    console.log(myLibrary);
 }
 
 function removeBook() {
     document.addEventListener('click', (e) => {
         if (e.target && e.target.classList.contains('btn-remove')) {
-            const thisTitle = getThisTitle(e.target);
-
             for (let i = 0; i < myLibrary.length; i++) {
+                const thisTitle = getThisValue(e.target, 'title').textContent;
+
                 if (myLibrary[i].title === thisTitle) {
-                    myLibrary.splice(1, 1);
-                    // At this point, the loop keep iterating and I don't know why. But the splice is working as i want it to be
-                    // Things that i have tried to prevent this (which isn't working) are:
-                    // Using break statement
-                    // Create a new variable to store boolean with initial value of false and set it to true after the if statement condition is met else break
+                    myLibrary.splice(i, 1);
                 }
             }
-
             e.target.parentNode.parentNode.parentNode.remove();
         }
     });
 }
 
-function getThisTitle(element) {
-    const parent = element.parentNode.parentNode.parentNode;
-    const childBook = parent.querySelector('.book-title');
-    return childBook.textContent;
+function editBook() {
+    document.addEventListener('click', (e) => {
+        if (e.target && e.target.classList.contains('btn-edit')) {
+            const thisTitle = getThisValue(e.target, 'title').textContent;
+            const thisAuthor = getThisValue(e.target, 'author').textContent;
+            const thisTotalPages = getThisValue(e.target, 'total-pages').textContent;
+            const thisPagesRead = getThisValue(e.target, 'pages-read').textContent;
+            const thisReadStatus = getThisValue(e.target, 'read-status').textContent;
+            showEditBookPopup(thisTitle, thisAuthor, thisTotalPages, thisPagesRead, thisReadStatus);
+        }
+    });
 }
 
-function showFormPopup() {
+function getThisValue(element, props) {
+    const parent = element.parentNode.parentNode.parentNode;
+    return parent.querySelector(`[data-${props}]`);
+}
+
+function showAddBookPopup() {
     const body = document.querySelector('body');
     const section = document.createElement('section');
+    const formTitle = document.createElement('h2');
+
     section.classList.add('popup');
-    section.innerHTML = `
-        <div class="popup-content popup-add-book">
-            <button class="btn-close">x</button>
-            <form class="add-book-form">
-                <h2>Add new book</h2>
-                <div>
-                    <p><label for="get-title">Title</label></p>
-                    <input type="text" id="get-title" required />
-                </div>
-                <div>
-                    <p><label for="get-author">Author</label></p>
-                    <input type="text" id="get-author" required />
-                </div>
-                <div>
-                    <p><label for="get-total-pages">Total Pages</label></p>
-                    <input type="number" id="get-total-pages" required />
-                </div>
-                <div>
-                    <p><label for="get-pages-read">Pages Read</label></p>
-                    <input type="number" id="get-pages-read" required />
-                </div>
-                <div>
-                    <p><label for="get-read-status">Read Status</label></p>
-                    <select id="get-read-status">
-                        <option value="Completed">Completed</option>
-                        <option value="Not completed yet">Not completed yet</option>
-                    </select>
-                </div>
-                <div>
-                    <button class="btn-add-popup" type="submit" />Add Book</button>
-                </div>
-            </form>
-        </div>
-    `;
+    section.innerHTML = getPopupComponent();
     body.appendChild(section);
 
     const closeBtn = document.querySelector('.btn-close');
     const form = document.querySelector('.add-book-form');
+    const addBtn = document.querySelector('.btn-add-popup');
+
+    addBtn.textContent = 'Add Book';
+    formTitle.textContent = 'Add New Book';
+    form.prepend(formTitle);
 
     closeBtn.addEventListener('click', () => section.remove());
     form.addEventListener('submit', (e) => {
@@ -136,4 +118,97 @@ function showFormPopup() {
         // Remove the form popup
         section.remove();
     });
+}
+
+function showEditBookPopup(thisTitle, thisAuthor, thisTotalPages, thisPagesRead, thisReadStatus) {
+    const body = document.querySelector('body');
+    const section = document.createElement('section');
+    const formTitle = document.createElement('h2');
+
+    section.classList.add('popup');
+    section.innerHTML = getPopupComponent();
+    body.appendChild(section);
+
+    const closeBtn = document.querySelector('.btn-close');
+    const form = document.querySelector('.add-book-form');
+    const addBtn = document.querySelector('.btn-add-popup');
+
+    addBtn.textContent = 'Save';
+    formTitle.textContent = 'Edit Book';
+    form.prepend(formTitle);
+
+    const title = document.getElementById('get-title');
+    const author = document.getElementById('get-author');
+    const totalPages = document.getElementById('get-total-pages');
+    const pagesRead = document.getElementById('get-pages-read');
+    const readStatus = document.getElementById('get-read-status');
+
+    title.value = thisTitle;
+    author.value = thisAuthor;
+    totalPages.value = thisTotalPages;
+    pagesRead.value = thisPagesRead;
+    readStatus.value = thisReadStatus;
+
+    closeBtn.addEventListener('click', () => section.remove());
+    form.addEventListener('submit', (e) => {
+        // Prevent default submit event which automatically reloading the page
+        e.preventDefault();
+
+        // Update this book key value
+        myLibrary.forEach((book) => {
+            if (book.title === thisTitle) {
+                book.title = title.value;
+                book.author = author.value;
+                book.totalPages = totalPages.value;
+                book.pagesRead = pagesRead.value;
+                book.readStatus = readStatus.value;
+            }
+        });
+
+        // Update the UI
+        getThisValue(e.target, 'title').textContent = title.value;
+        getThisValue(e.target, 'author').textContent = author.value;
+        getThisValue(e.target, 'total-pages').textContent = totalPages.value;
+        getThisValue(e.target, 'pages-read').textContent = pagesRead.value;
+        getThisValue(e.target, 'read-status').textContent = readStatus.value;
+
+        // Remove the form popup
+        section.remove();
+    });
+}
+
+function getPopupComponent() {
+    return `
+    <div class="popup-content popup-add-book">
+        <button class="btn-close">x</button>
+        <form class="add-book-form">
+            <div>
+                <p><label for="get-title">Title</label></p>
+                <input type="text" id="get-title" required />
+            </div>
+            <div>
+                <p><label for="get-author">Author</label></p>
+                <input type="text" id="get-author" required />
+            </div>
+            <div>
+                <p><label for="get-total-pages">Total Pages</label></p>
+                <input type="number" id="get-total-pages" required />
+            </div>
+            <div>
+                <p><label for="get-pages-read">Pages Read</label></p>
+                <input type="number" id="get-pages-read" required />
+            </div>
+            <div>
+                <p><label for="get-read-status">Read Status</label></p>
+                <select id="get-read-status">
+                    <option value="Completed">Completed</option>
+                    <option value="Not completed yet">Not completed yet</option>
+                </select>
+            </div>
+            <div>
+                <button class="btn-add-popup" type="submit" /></button>
+            </div>
+        </form>
+    </div>
+    `;
 }
