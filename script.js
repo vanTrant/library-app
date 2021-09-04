@@ -52,6 +52,15 @@ let myLibrary = Store.getBooks();
 myLibrary.forEach((book) => renderBook(book));
 addBookBtn.addEventListener('click', showAddBookPopup);
 
+// Button animation
+addBookBtn.addEventListener('mouseenter', () => {
+    document.querySelector('.text').classList.add('hover');
+});
+
+addBookBtn.addEventListener('mouseleave', () => {
+    document.querySelector('.text').classList.remove('hover');
+});
+
 function Book(title, author, totalPages, pagesRead, readStatus) {
     this.title = title;
     this.author = author;
@@ -223,23 +232,23 @@ function getPopupComponent() {
     <div class="popup-content popup-add-book">
         <button class="btn-close">x</button>
         <form class="add-book-form">
-            <div>
-                <p><label for="get-title">Title</label></p>
-                <input type="text" id="get-title" required />
+            <div class="input-container">
+                <input type="text" id="get-title" autocomplete="off" placeholder=" " required />
+                <label for="get-title" class="label-input"><span class="span-text">Title</span></label>
             </div>
-            <div>
-                <p><label for="get-author">Author</label></p>
-                <input type="text" id="get-author" required />
+            <div class="input-container">
+                <input type="text" id="get-author" autocomplete="off" placeholder=" " required />
+                <label for="get-author" class="label-input"><span class="span-text">Author</span></label>
             </div>
-            <div>
-                <p><label for="get-total-pages">Total Pages</label></p>
-                <input type="number" id="get-total-pages" required />
+            <div class="input-container">
+                <input type="number" id="get-total-pages" autocomplete="off" placeholder=" " required />
+                <label for="get-total-pages" class="label-input"><span class="span-text">Total Pages</span></label>
             </div>
-            <div>
-                <p><label for="get-pages-read">Pages Read</label></p>
-                <input type="number" id="get-pages-read" required />
+            <div class="input-container">
+                <input type="number" id="get-pages-read" autocomplete="off" placeholder=" " required />
+                <label for="get-pages-read" class="label-input"><span class="span-text">Pages Read</span></label>
             </div>
-            <div>
+            <div class="input-container">
                 <p><label for="get-read-status">Read Status</label></p>
                 <select id="get-read-status">
                     <option value="Completed">Completed</option>

@@ -1,6 +1,5 @@
 /* TODO:
-1. Add media query
-2. Add button animation */
+1. Add media query */
 
 * {
     padding: 0;
@@ -78,35 +77,81 @@ nav {
 .btn {
     font-size: 0.8rem;
     padding: 8px 12px 8px 12px;
-    border: none;
-    border-radius: 5px;
-    box-shadow: 0 0 2px rgba(0, 0, 0, 0.9);
+    border: 1px solid rgba(0, 0, 0, 0.5);
     cursor: pointer;
+    transition: 0.2s ease;
 }
 
 .btn-edit {
-    background: rgb(255, 209, 5);
+    background: rgb(17, 20, 51);
+    color: rgb(250, 250, 250);
 }
 
 .btn-remove {
-    background: rgb(207, 62, 36);
-    color: rgba(255, 255, 255, 0.9);
+    background: rgb(204, 51, 0);
+    color: rgb(255, 255, 255);
+    margin-left: 0.6rem;
+}
+
+.btn-edit:hover,
+.btn-remove:hover {
+    transform: translate(5px, -5px);
+    box-shadow: -5px 5px black;
 }
 
 .add-book-card {
     justify-content: center;
 }
 
+.btn-add-container {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    height: max-content;
+    width: 10rem;
+    overflow: hidden;
+    border-radius: 0 2rem 2rem 0;
+}
+
+.btn-add-container > .text {
+    border-radius: 1.5rem 0 0 1.5rem;
+    height: 3rem;
+    width: 8rem;
+    position: absolute;
+    left: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgb(17, 20, 51);
+    color: rgb(240, 240, 240);
+    transition: 0.3s ease-in-out;
+}
+
+.btn-add-container > .text.hover {
+    left: 5%;
+}
+
+.btn-add-container > .text > p {
+    padding-right: 0.5rem;
+}
+
 .btn-add {
-    background: transparent;
+    background: rgb(250, 250, 250);
     font-size: 2rem;
     width: 3rem;
     height: 3rem;
     border-radius: 50%;
-    position: fixed;
-    bottom: 1.5rem;
-    right: 1.5rem;
     cursor: pointer;
+    border: 2px solid rgba(0, 0, 0, 0.5);
+    z-index: 2;
+    transition: 0.3s ease-in-out;
+}
+
+.btn-add:hover {
+    transform: rotateZ(180deg);
 }
 
 .popup {
@@ -124,11 +169,12 @@ nav {
 
 .popup-add-book {
     padding: 2rem;
+    padding-bottom: 3.5rem;
     background: rgb(240, 240, 240);
     position: relative;
 }
 
-.popup-add-book > .btn-close {
+.popup-add-book .btn-close {
     font-size: 1.8rem;
     border: none;
     color: red;
@@ -138,47 +184,100 @@ nav {
     cursor: pointer;
 }
 
-.popup-add-book > form > h2 {
+.popup-add-book h2 {
     text-align: center;
     padding: 0.5rem;
 }
 
-.popup-add-book > form > div {
-    padding: 0.4rem;
-    font-size: 0.9rem;
+.input-container {
+    height: 50px;
+    position: relative;
+    margin-bottom: 1rem;
+    overflow: hidden;
+    font-size: 0.8rem;
 }
 
-.popup-add-book > form > div:last-child {
-    display: flex;
-    justify-content: center;
+.input-container input {
+    width: 100%;
+    height: 100%;
+    color: #595f6e;
+    font-size: 0.7rem;
+    padding-top: 20px;
+    border: none;
+    outline: none;
+    background: none;
 }
 
-.popup-add-book > form > div:last-child > [type='submit'] {
+.input-container .label-input {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    pointer-events: none;
+    border-bottom: 1px solid black;
+}
+
+.input-container .label-input::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    height: 100%;
+    width: 100%;
+    border-bottom: 3px solid #5fa8d3;
+    transform: translateX(-100%);
+    transition: 0.2s ease;
+}
+
+.span-text {
+    position: absolute;
+    bottom: 5px;
+    left: 0;
+    transition: all 0.2s ease;
+}
+
+.input-container input:focus + .label-input .span-text,
+.input-container input:not(:placeholder-shown) + .label-input .span-text {
+    transform: translateY(-150%);
+    font-style: 0.7rem;
+    color: #5fa8d3;
+}
+
+.input-container input :focus + .label-input::after,
+.input-container input:not(:placeholder-shown) + .label-input::after {
+    transform: translateX(0%);
+}
+
+.input-container select {
+    background: none;
+    border: none;
+    border-bottom: 1px solid black;
+    padding: 5px;
+    padding-left: 0;
+    outline: none;
+    width: 100%;
+    font-size: 0.7rem;
+}
+
+.popup-add-book .btn-add-popup {
     padding: 8px 20px 8px 20px;
     font-size: 0.8rem;
-    color: rgba(0, 0, 0, 0.8);
-    background: rgba(255, 255, 255, 0.9);
-    border: 1px solid rgba(0, 0, 0, 0.9);
-    cursor: pointer;
-}
-
-.popup-add-book p {
-    margin-bottom: 5px;
-}
-
-.popup-add-book > form > div > [type='text'],
-.popup-add-book > form > div > [type='number'],
-.popup-add-book > form > div > select {
-    width: 30ch;
-    font-size: 0.8rem;
-    padding: 5px;
+    color: rgba(255, 255, 255, 0.8);
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 2px;
+    background: rgba(21, 70, 230, 0.9);
     border: none;
-    background: rgba(255, 255, 255, 0.3);
-    outline: none;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 2.5rem;
+    width: 100%;
+    transition: 0.2s ease;
 }
 
-.popup-add-book > form > div > [type='text']:focus,
-.popup-add-book > form > div > [type='number']:focus {
-    border-bottom: 3px solid rgb(0, 126, 199);
+.popup-add-book .btn-add-popup:hover {
+    background: rgba(14, 49, 165, 0.9);
 }
