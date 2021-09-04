@@ -1,13 +1,54 @@
 // TODO :
-// 1. Implement local storage
 // Optional: Implement cloud storage (google login)
-// 2. Add media query for small device and large monitor
-
-const addBookBtn = document.querySelector('.btn-add');
-let myLibrary = [];
+// Add media query for small device and large monitor
 
 // Local Storage
+class Store {
+    static getBooks() {
+        let books;
+        if (localStorage.getItem('books') === null) {
+            books = [];
+        } else {
+            books = JSON.parse(localStorage.getItem('books'));
+        }
+        return books;
+    }
 
+    static addBook(book) {
+        const books = Store.getBooks();
+        books.push(book);
+        localStorage.setItem('books', JSON.stringify(books));
+    }
+
+    static editBook(thisTitle, title, author, totalPages, pagesRead, readStatus) {
+        const books = Store.getBooks();
+        books.forEach((book) => {
+            if (book.title === thisTitle) {
+                book.title = title.value;
+                book.author = author.value;
+                book.totalPages = totalPages.value;
+                book.pagesRead = pagesRead.value;
+                book.readStatus = readStatus.value;
+            }
+        });
+        localStorage.setItem('books', JSON.stringify(books));
+    }
+
+    static removeBook(title) {
+        const books = Store.getBooks();
+        books.forEach((book, index) => {
+            if (book.title === title) {
+                books.splice(index, 1);
+            }
+        });
+        localStorage.setItem('books', JSON.stringify(books));
+    }
+}
+
+const addBookBtn = document.querySelector('.btn-add');
+let myLibrary = Store.getBooks();
+
+myLibrary.forEach((book) => renderBook(book));
 addBookBtn.addEventListener('click', showAddBookPopup);
 
 function Book(title, author, totalPages, pagesRead, readStatus) {
@@ -45,7 +86,6 @@ function renderBook(book) {
         </div>
     `;
     app.appendChild(div);
-    console.log(myLibrary);
 }
 
 function removeBook() {
@@ -56,6 +96,7 @@ function removeBook() {
 
                 if (myLibrary[i].title === thisTitle) {
                     myLibrary.splice(i, 1);
+                    Store.removeBook(thisTitle);
                 }
             }
             e.target.parentNode.parentNode.parentNode.remove();
@@ -71,7 +112,7 @@ function editBook() {
             const thisTotalPages = getThisValue(e.target, 'total-pages').textContent;
             const thisPagesRead = getThisValue(e.target, 'pages-read').textContent;
             const thisReadStatus = getThisValue(e.target, 'read-status').textContent;
-            showEditBookPopup(thisTitle, thisAuthor, thisTotalPages, thisPagesRead, thisReadStatus);
+            showEditBookPopup(e.target, thisTitle, thisAuthor, thisTotalPages, thisPagesRead, thisReadStatus);
         }
     });
 }
@@ -112,7 +153,11 @@ function showAddBookPopup() {
 
         // Add new book
         const book = new Book(title, author, totalPages, pagesRead, readStatus);
+        const obj = Object.create(book);
+        console.log(obj);
+        console.log(book);
         myLibrary.push(book);
+        Store.addBook(book);
         renderBook(book);
 
         // Remove the form popup
@@ -120,7 +165,7 @@ function showAddBookPopup() {
     });
 }
 
-function showEditBookPopup(thisTitle, thisAuthor, thisTotalPages, thisPagesRead, thisReadStatus) {
+function showEditBookPopup(targetEvent, thisTitle, thisAuthor, thisTotalPages, thisPagesRead, thisReadStatus) {
     const body = document.querySelector('body');
     const section = document.createElement('section');
     const formTitle = document.createElement('h2');
@@ -155,22 +200,14 @@ function showEditBookPopup(thisTitle, thisAuthor, thisTotalPages, thisPagesRead,
         e.preventDefault();
 
         // Update this book key value
-        myLibrary.forEach((book) => {
-            if (book.title === thisTitle) {
-                book.title = title.value;
-                book.author = author.value;
-                book.totalPages = totalPages.value;
-                book.pagesRead = pagesRead.value;
-                book.readStatus = readStatus.value;
-            }
-        });
+        Store.editBook(thisTitle, title, author, totalPages, pagesRead, readStatus);
 
         // Update the UI
-        getThisValue(e.target, 'title').textContent = title.value;
-        getThisValue(e.target, 'author').textContent = author.value;
-        getThisValue(e.target, 'total-pages').textContent = totalPages.value;
-        getThisValue(e.target, 'pages-read').textContent = pagesRead.value;
-        getThisValue(e.target, 'read-status').textContent = readStatus.value;
+        getThisValue(targetEvent, 'title').textContent = title.value;
+        getThisValue(targetEvent, 'author').textContent = author.value;
+        getThisValue(targetEvent, 'total-pages').textContent = totalPages.value;
+        getThisValue(targetEvent, 'pages-read').textContent = pagesRead.value;
+        getThisValue(targetEvent, 'read-status').textContent = readStatus.value;
 
         // Remove the form popup
         section.remove();
