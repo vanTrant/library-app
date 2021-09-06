@@ -9,8 +9,8 @@
 
 :root {
     font-size: 20px;
-    font-family: sans-serif;
-    --body-bg: rgb(255, 255, 255);
+    font-family: 'Noto Sans', sans-serif;
+    --body-bg: rgb(251, 250, 245);
     --popup-bg: rgb(240, 240, 240);
     --popup-input-border: rgb(0, 0, 0);
     --text-primary: rgb(20, 20, 20);
@@ -67,6 +67,7 @@ body {
 
 a {
     color: rgb(40, 103, 221);
+    text-decoration: none;
 }
 
 nav {
@@ -120,12 +121,13 @@ nav .dark-mode-toggler {
 }
 
 .book-title {
-    font-size: 1.2 rem;
+    font-size: 1.1rem;
 }
 
 .book-title,
 .book-author {
     color: var(--book-cover-text);
+    font-family: 'Roboto Slab', serif;
 }
 
 .book-information {
@@ -243,6 +245,7 @@ nav .dark-mode-toggler {
     min-width: 300px;
     max-width: 320px;
     max-height: 100vh;
+    font-family: sans-serif;
 }
 
 .popup-add-book .btn-close {
@@ -332,6 +335,10 @@ nav .dark-mode-toggler {
     width: 100%;
     font-size: 0.7rem;
     margin-top: 3px;
+}
+
+.input-container select option {
+    color: var(--book-cover-text);
 }
 
 .popup-add-book .btn-add-popup {
