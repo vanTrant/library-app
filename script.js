@@ -21,17 +21,15 @@ class Store {
 
     static editBook(thisTitle, title, author, totalPages, pagesRead, readStatus) {
         const books = Store.getBooks();
-        if (!books.some((book) => book.title === thisTitle)) {
-            books.forEach((book) => {
-                if (book.title === thisTitle) {
-                    book.title = title.value;
-                    book.author = author.value;
-                    book.totalPages = totalPages.value;
-                    book.pagesRead = pagesRead.value;
-                    book.readStatus = readStatus.value;
-                }
-            });
-        } else return;
+        books.forEach((book) => {
+            if (book.title === thisTitle) {
+                book.title = title.value;
+                book.author = author.value;
+                book.totalPages = totalPages.value;
+                book.pagesRead = pagesRead.value;
+                book.readStatus = readStatus.value;
+            }
+        });
         localStorage.setItem('books', JSON.stringify(books));
     }
 
@@ -239,20 +237,36 @@ function showEditBookPopup(targetEvent, thisTitle, thisAuthor, thisTotalPages, t
         // Prevent default submit event which automatically reloading the page
         e.preventDefault();
 
-        // Update this book key value
-        Store.editBook(thisTitle, title, author, totalPages, pagesRead, readStatus);
-
         // Update the UI
         const books = Store.getBooks();
-        if (!books.some((book) => book.title === thisTitle)) {
+        // if (!books.some((book) => book.title === thisTitle)) {
+        //     getThisValue(targetEvent, 'title').textContent = title.value;
+        //     getThisValue(targetEvent, 'author').textContent = author.value;
+        //     getThisValue(targetEvent, 'total-pages').textContent = totalPages.value;
+        //     getThisValue(targetEvent, 'pages-read').textContent = pagesRead.value;
+        //     getThisValue(targetEvent, 'read-status').textContent = readStatus.value;
+
+        //     // Remove the form popup
+        //     section.remove();
+        // } else if (books.some((book) => book.title === title.value)) {
+        //     alertTitleUnavailable();
+        // }
+
+        if (books.some((book) => book.title === title.value)) {
+            alertTitleUnavailable();
+        } else {
+            // Update this book key value
+            Store.editBook(thisTitle, title, author, totalPages, pagesRead, readStatus);
+
             getThisValue(targetEvent, 'title').textContent = title.value;
             getThisValue(targetEvent, 'author').textContent = author.value;
             getThisValue(targetEvent, 'total-pages').textContent = totalPages.value;
             getThisValue(targetEvent, 'pages-read').textContent = pagesRead.value;
             getThisValue(targetEvent, 'read-status').textContent = readStatus.value;
+
+            // Remove the form popup
+            section.remove();
         }
-        // Remove the form popup
-        section.remove();
     });
 }
 
