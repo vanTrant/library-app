@@ -31,7 +31,7 @@ class Store {
                     book.readStatus = readStatus.value;
                 }
             });
-        } else return alert('title already exist');
+        } else return;
         localStorage.setItem('books', JSON.stringify(books));
     }
 
@@ -132,6 +132,32 @@ function getThisValue(element, props) {
     return parent.querySelector(`[data-${props}]`);
 }
 
+function alertTitleUnavailable() {
+    const lastChild = document.querySelector('.btn-add-popup').parentNode;
+    const form = lastChild.parentNode;
+    const div = document.createElement('div');
+    div.classList.add('title-exist');
+    div.innerHTML = `
+        <p><i class="fas fa-exclamation-circle"></i> Title already exist.</p>
+    `;
+    form.insertBefore(div, lastChild);
+
+    setTimeout(() => div.remove(), 3000);
+}
+
+function alertTitleAvailable() {
+    const main = document.getElementById('main');
+    const div = document.createElement('div');
+    div.classList.add('title-available');
+    div.innerHTML = `
+        <p><i class="fas fa-exclamation-circle"></i> Book added succesfully.</p>
+    `;
+    main.appendChild(div);
+    setTimeout(() => div.classList.add('show'), 200);
+    setTimeout(() => div.classList.remove('show'), 3000);
+    setTimeout(() => div.remove(), 3500);
+}
+
 function showAddBookPopup() {
     const body = document.querySelector('body');
     const section = document.createElement('section');
@@ -162,17 +188,20 @@ function showAddBookPopup() {
         const readStatus = document.getElementById('get-read-status').value;
 
         if (!myLibrary.some((book) => book.title === title)) {
-            console.log('title available');
             // Add new book
             const book = new Book(title, author, totalPages, pagesRead, readStatus);
 
             myLibrary.push(book);
             Store.addBook(book);
             renderBook(book);
-        } else return alert('Title already exist');
 
-        // Remove the form popup
-        section.remove();
+            // Remove the form popup
+            section.remove();
+
+            alertTitleAvailable();
+        } else {
+            alertTitleUnavailable();
+        }
     });
 }
 

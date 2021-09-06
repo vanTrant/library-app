@@ -115,7 +115,7 @@ nav .dark-mode-toggler {
 }
 
 .book-title {
-    font-size: 1.3rem;
+    font-size: 1.2 rem;
 }
 
 .book-title,
@@ -236,6 +236,7 @@ nav .dark-mode-toggler {
     color: var(--text-primary);
     min-width: 300px;
     max-width: 320px;
+    max-height: 100vh;
 }
 
 .popup-add-book .btn-close {
@@ -347,6 +348,34 @@ nav .dark-mode-toggler {
 
 .popup-add-book .btn-add-popup:hover {
     background: rgba(14, 49, 165, 0.9);
+}
+
+.title-exist {
+    background: rgb(238, 158, 165);
+    font-size: 0.8rem;
+    padding: 0.5rem;
+    color: var(--book-cover-text);
+}
+
+.title-available {
+    width: 15rem;
+    background: rgb(23, 141, 50);
+    color: var(--text-primary);
+    text-align: center;
+    position: fixed;
+    left: 50%;
+    bottom: -10%;
+    transform: translateX(-50%);
+    padding: 0.5rem;
+    border-radius: 5px;
+    font-size: 0.8rem;
+    transition: 0.3s ease;
+    z-index: 3;
+}
+
+.title-available.show {
+    bottom: 1rem;
+    transition: 0.3s ease;
 }
 
 @media only screen and (max-width: 480px) {
