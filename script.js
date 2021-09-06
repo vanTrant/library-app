@@ -240,18 +240,6 @@ function showEditBookPopup(targetEvent, thisTitle, thisAuthor, thisTotalPages, t
 
         // Update the UI
         const books = Store.getBooks();
-        // if (!books.some((book) => book.title === thisTitle)) {
-        //     getThisValue(targetEvent, 'title').textContent = title.value;
-        //     getThisValue(targetEvent, 'author').textContent = author.value;
-        //     getThisValue(targetEvent, 'total-pages').textContent = totalPages.value;
-        //     getThisValue(targetEvent, 'pages-read').textContent = pagesRead.value;
-        //     getThisValue(targetEvent, 'read-status').textContent = readStatus.value;
-
-        //     // Remove the form popup
-        //     section.remove();
-        // } else if (books.some((book) => book.title === title.value)) {
-        //     alertTitleUnavailable();
-        // }
 
         if (books.some((book) => book.title === title.value)) {
             alertTitleUnavailable('Title already exist.', 'title-exist');
