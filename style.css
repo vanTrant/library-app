@@ -44,6 +44,7 @@
 html {
     scrollbar-width: 10px;
     scrollbar-color: var(--scroll-thumb) transparent;
+    -webkit-tap-highlight-color: transparent;
 }
 
 html::-webkit-scrollbar {
