@@ -108,6 +108,7 @@ function removeBook() {
                 }
             }
             e.target.parentNode.parentNode.parentNode.remove();
+            alertTitleAvailable('Book removed.', 'alert-remove');
         }
     });
 }
@@ -130,25 +131,25 @@ function getThisValue(element, props) {
     return parent.querySelector(`[data-${props}]`);
 }
 
-function alertTitleUnavailable() {
+function alertTitleUnavailable(message, className) {
     const lastChild = document.querySelector('.btn-add-popup').parentNode;
     const form = lastChild.parentNode;
     const div = document.createElement('div');
-    div.classList.add('title-exist');
+    div.classList.add(className);
     div.innerHTML = `
-        <p><i class="fas fa-exclamation-circle"></i> Title already exist.</p>
+        <p><i class="fas fa-exclamation-circle"></i> ${message}</p>
     `;
     form.insertBefore(div, lastChild);
 
     setTimeout(() => div.remove(), 3000);
 }
 
-function alertTitleAvailable() {
+function alertTitleAvailable(message, className) {
     const main = document.getElementById('main');
     const div = document.createElement('div');
-    div.classList.add('title-available');
+    div.classList.add(className);
     div.innerHTML = `
-        <p><i class="fas fa-exclamation-circle"></i> Book added succesfully.</p>
+        <p><i class="fas fa-exclamation-circle"></i> ${message}</p>
     `;
     main.appendChild(div);
     setTimeout(() => div.classList.add('show'), 200);
@@ -196,9 +197,9 @@ function showAddBookPopup() {
             // Remove the form popup
             section.remove();
 
-            alertTitleAvailable();
+            alertTitleAvailable('Book added succesfully.', 'title-available');
         } else {
-            alertTitleUnavailable();
+            alertTitleUnavailable('Title already exist.', 'title-exist');
         }
     });
 }
@@ -253,7 +254,7 @@ function showEditBookPopup(targetEvent, thisTitle, thisAuthor, thisTotalPages, t
         // }
 
         if (books.some((book) => book.title === title.value)) {
-            alertTitleUnavailable();
+            alertTitleUnavailable('Title already exist.', 'title-exist');
         } else {
             // Update this book key value
             Store.editBook(thisTitle, title, author, totalPages, pagesRead, readStatus);
@@ -266,6 +267,8 @@ function showEditBookPopup(targetEvent, thisTitle, thisAuthor, thisTotalPages, t
 
             // Remove the form popup
             section.remove();
+
+            alertTitleAvailable('Book edited succesfully.', 'title-available');
         }
     });
 }

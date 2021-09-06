@@ -21,6 +21,8 @@
     --add-btn-text-bg: rgb(17, 20, 51);
     --btn-drop-shadow: rgb(0, 0, 0, 0.8);
     --scroll-thumb: rgb(85, 85, 85);
+    --title-exist-box: rgb(241, 187, 192);
+    --title-available-box: rgb(147, 241, 96);
 }
 
 .dark-mode {
@@ -35,6 +37,8 @@
     --add-btn-text-bg: rgb(24, 38, 116);
     --btn-drop-shadow: rgba(112, 112, 112, 0.5);
     --scroll-thumb: rgb(155, 155, 155); /* Why isn't this working? */
+    --title-exist-box: rgb(238, 158, 165);
+    --title-available-box: rgb(23, 141, 50);
 }
 
 html {
@@ -351,7 +355,7 @@ nav .dark-mode-toggler {
 }
 
 .title-exist {
-    background: rgb(238, 158, 165);
+    background: var(--title-exist-box);
     font-size: 0.8rem;
     padding: 0.5rem;
     color: var(--book-cover-text);
@@ -359,7 +363,7 @@ nav .dark-mode-toggler {
 
 .title-available {
     width: 15rem;
-    background: rgb(23, 141, 50);
+    background: var(--title-available-box);
     color: var(--text-primary);
     text-align: center;
     position: fixed;
@@ -374,6 +378,27 @@ nav .dark-mode-toggler {
 }
 
 .title-available.show {
+    bottom: 1rem;
+    transition: 0.3s ease;
+}
+
+.alert-remove {
+    width: 15rem;
+    background: var(--title-exist-box);
+    color: var(--text-primary);
+    text-align: center;
+    position: fixed;
+    left: 50%;
+    bottom: -10%;
+    transform: translateX(-50%);
+    padding: 0.5rem;
+    border-radius: 5px;
+    font-size: 0.8rem;
+    transition: 0.3s ease;
+    z-index: 3;
+}
+
+.alert-remove.show {
     bottom: 1rem;
     transition: 0.3s ease;
 }
